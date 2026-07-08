@@ -4,91 +4,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>QRIran | ساخت QR Code</title>
+<title>QRIran</title>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <style>
-*{
-box-sizing:border-box;
-font-family:tahoma, sans-serif;
-}
-
 body{
-margin:0;
-min-height:100vh;
-background:#050505;
-display:flex;
-justify-content:center;
-align-items:center;
-color:white;
+    margin:0;
+    background:#050505;
+    color:white;
+    font-family:tahoma;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
-.card{
-width:420px;
-background:#111;
-padding:30px;
-border-radius:20px;
-box-shadow:0 0 25px #00ff66;
-text-align:center;
+.box{
+    background:#111;
+    width:420px;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 25px #00ff66;
 }
 
-.logo{
-font-size:38px;
-font-weight:bold;
-color:#00ff66;
+h1{
+    color:#00ff66;
+    font-size:40px;
 }
 
-p{
-color:#ccc;
-}
-
-input{
-width:100%;
-padding:15px;
-margin:15px 0;
-border-radius:10px;
-border:1px solid #00ff66;
-background:#222;
-color:white;
-font-size:16px;
+select,input{
+    width:100%;
+    padding:14px;
+    margin:8px 0;
+    background:#222;
+    color:white;
+    border:1px solid #00ff66;
+    border-radius:10px;
 }
 
 button{
-width:100%;
-padding:15px;
-border:0;
-border-radius:10px;
-background:#00ff66;
-color:#000;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    background:#00ff66;
+    color:#000;
+    border:0;
+    border-radius:10px;
+    font-size:18px;
+    cursor:pointer;
 }
 
 button:hover{
-background:#00cc55;
+    background:#00cc55;
 }
 
 #qrcode{
-margin:25px auto;
-background:white;
-padding:10px;
-width:max-content;
+    margin:25px auto;
+    background:white;
+    padding:10px;
+    width:max-content;
 }
 
-.download{
-display:none;
-background:#222;
-color:#00ff66;
-margin-top:10px;
-border:1px solid #00ff66;
-}
-
-.footer{
-margin-top:20px;
-font-size:12px;
-color:#777;
+#download{
+    display:none;
 }
 
 </style>
@@ -97,67 +77,84 @@ color:#777;
 
 <body>
 
-<div class="card">
+<div class="box">
 
-<div class="logo">
-QRIran
-</div>
+<h1>QRIran</h1>
 
-<p>
-ساخت سریع QR Code تجاری
-</p>
+<select id="type">
+<option value="text">متن</option>
+<option value="url">لینک</option>
+<option value="phone">شماره تماس</option>
+<option value="email">ایمیل</option>
+<option value="wifi">وای‌فای</option>
+</select>
 
-<input id="text" placeholder="متن یا لینک را وارد کنید">
 
-<button onclick="createQR()">
+<input id="data" placeholder="اطلاعات QR را وارد کنید">
+
+
+<button onclick="makeQR()">
 ساخت QR Code
 </button>
 
+
 <div id="qrcode"></div>
 
-<button id="download" class="download" onclick="downloadQR()">
+
+<button id="download" onclick="downloadQR()">
 دانلود QR
 </button>
 
-<div class="footer">
-© QRIran
-</div>
 
 </div>
 
 
 <script>
 
-function createQR(){
+function makeQR(){
+
+let value=document.getElementById("data").value;
+let type=document.getElementById("type").value;
+
+if(type=="phone"){
+value="TEL:"+value;
+}
+
+if(type=="email"){
+value="mailto:"+value;
+}
+
+if(type=="wifi"){
+value="WIFI:T:WPA;S:"+value+";;";
+}
+
 
 let box=document.getElementById("qrcode");
-
 box.innerHTML="";
 
-let text=document.getElementById("text").value;
 
 new QRCode(box,{
-text:text,
+text:value,
 width:250,
 height:250
 });
+
 
 document.getElementById("download").style.display="block";
 
 }
 
 
+
 function downloadQR(){
 
 let img=document.querySelector("#qrcode img");
 
-let link=document.createElement("a");
+let a=document.createElement("a");
 
-link.href=img.src;
-
-link.download="qriran.png";
-
-link.click();
+a.href=img.src;
+a.download="QRIran.png";
+a.click();
 
 }
 
